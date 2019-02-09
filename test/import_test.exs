@@ -2,7 +2,7 @@ defmodule ImportTest do
   use ExUnit.Case
   doctest Import
 
-  test "greets the world" do
+  test "format product into string" do
     assert Import.formatProduct(
       %{"categories" => ["Customer Service", "Call Center"], "title" => "Freshdesk", "twitter" => "@freshdesk"}
     ) == "categories: Customer Service,Call Center title: Freshdesk twitter: @freshdesk "
