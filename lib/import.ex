@@ -2,7 +2,11 @@ defmodule Import do
   def main(args) do
     type = Enum.at(args,0) 
     filepath = Enum.at(args,1)
-    mapContent(type, filepath) |> importProducts
+    try do
+      mapContent(type, filepath) |> importProducts
+    rescue
+      e in RuntimeError -> IO.puts("An error occurred: " <> e.message)
+    end
   end
 
   defp mapContent("capterra", filepath) do
@@ -12,6 +16,10 @@ defmodule Import do
 
   defp mapContent("softwareadvice", filepath) do
     filepath |> File.read! |> Poison.Parser.parse! |> Map.get("products")
+  end
+
+  defp mapContent(type, _) do
+    raise "File type #{type} not supported"
   end
 
   defp importProducts(products) do
