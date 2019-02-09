@@ -16,8 +16,20 @@ defmodule Import do
 
   defp importProducts(products) do
     Enum.map products, fn product ->
-      p = Enum.reduce(product, "", fn {k,v}, acc -> "#{acc}#{k}: #{v} " end)
+      p = formatProduct(product)
       IO.puts "Importing: #{p}"
     end
+  end
+
+  def formatProduct(product) do
+    Enum.reduce(product, "", fn {k,v}, acc -> formatKey({k,v}, acc) end)
+  end
+
+  defp formatKey({k,v}, acc) when is_list(v) and not is_integer(hd(v)) do 
+    formatKey({k, Enum.join(v, ",")}, acc)
+  end
+
+  defp formatKey({k,v}, acc) do 
+    "#{acc}#{k}: #{v} "
   end
 end
