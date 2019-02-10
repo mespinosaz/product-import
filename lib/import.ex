@@ -9,16 +9,20 @@ defmodule Import do
     end
   end
 
-  defp mapContent("capterra", filepath) do
+  def mapContent("capterra", filepath) do
     [ document | _ ] = :yamerl_constr.file(filepath)
     document
+    |> Enum.map (fn doc -> Enum.into(doc, %{}) end)
   end
 
-  defp mapContent("softwareadvice", filepath) do
-    filepath |> File.read! |> Poison.Parser.parse! |> Map.get("products")
+  def mapContent("softwareadvice", filepath) do
+    filepath 
+    |> File.read! 
+    |> Poison.Parser.parse! 
+    |> Map.get("products")
   end
 
-  defp mapContent(type, _) do
+  def mapContent(type, _) do
     raise "File type #{type} not supported"
   end
 
